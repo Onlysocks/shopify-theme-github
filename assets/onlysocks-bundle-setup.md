@@ -6,6 +6,12 @@ After these files are synced to the GitHub-connected theme, open Customize, sele
 
 The block is optional and has not been inserted into existing product templates. To use it instead of the standard purchase controls, hide the existing variant picker, quantity selector and buy-buttons blocks on that template in the editor. Keep the price block only if you want the normal product price displayed as well.
 
+Each tier has its own collection selector. A blank tier selector uses the default single-pair collection, preserving existing setups. An explicitly selected empty collection stays empty. Each tier's first selection and dropdown choices come only from its effective collection, with a maximum of 50 products per tier.
+
+Duplicate collections containing the same products do not isolate native Shopify discounts: cart items retain their product/variant identities, not the collection they were selected from. Overlapping collections still make products eligible for overlapping rules. Order discounts remain order-wide.
+
+Sizes auto-select when exactly one in-stock size is available for the selected product and any other chosen options. Multiple available sizes still require a choice; sold-out sizes are never auto-selected. Other product options remain manual.
+
 ## Configure the offers
 
 Tier 1 starts with up to four paid pairs, tier 2 with five paid plus one free, and tier 3 with seven paid plus two free. All percentage discounts default to zero until you set your intended percentages. Free-delivery badges default off until shipping is configured. Titles are editable independently; update titles if quantities change.

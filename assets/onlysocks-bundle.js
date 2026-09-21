@@ -8,17 +8,17 @@
       this.initialized = true;
       this.config = JSON.parse(config.textContent);
       this.s = this.config.settings;
-      this.products = this.config.products;
       this.active = 0;
       this.busy = false;
       this.money = cents => new Intl.NumberFormat(this.config.locale, { style: 'currency', currency: this.config.currency }).format(cents / 100);
       this.button = this.querySelector('[data-osb-add]');
       this.status = this.querySelector('[data-osb-status]');
-      const first = this.products.find(p => p.id === this.config.currentProduct) || this.products[0];
       this.tiers = [1, 2, 3].map(n => {
+        const products = this.config.tierProducts?.[n - 1] ?? this.config.products ?? [];
+        const first = products.find(p => p.id === this.config.currentProduct) || products[0];
         const count = Number(this.s[`t${n}_paid`]) + Number(this.s[`t${n}_free`]);
-        return { n, free: Number(this.s[`t${n}_free`]), percent: Number(this.s[`t${n}_percent`]),
-          slots: Array.from({ length: count }, (_, i) => ({ product: i === 0 ? first : null, choices: [], variant: null })) };
+        return { n, products, free: Number(this.s[`t${n}_free`]), percent: Number(this.s[`t${n}_percent`]),
+          slots: Array.from({ length: count }, (_, i) => ({ products, product: i === 0 ? first : null, choices: [], variant: null })) };
       });
       this.tiers.forEach((tier, index) => this.buildTier(tier, index));
       this.button.addEventListener('click', () => this.add());
@@ -93,7 +93,7 @@
       const trigger = this.productButton(slot.product);
       trigger.setAttribute('aria-expanded', 'false');
       const menu = this.node('div', 'osb-menu'); menu.hidden = true;
-      this.products.forEach(product => {
+      slot.products.forEach(product => {
         const choice = this.productButton(product);
         choice.addEventListener('click', () => {
           slot.product = product; slot.choices = []; slot.variant = null;
@@ -112,6 +112,12 @@
       if (!product) return;
       const sizeIndex = product.options.findIndex(o => o.name.trim().toLowerCase() === 'size');
       if (sizeIndex < 0) { slot.error.textContent = this.s.size_error; return; }
+      const availableSizes = [...new Set(product.variants
+        .filter(variant => variant.available && slot.choices.every((picked, i) => i === sizeIndex || !picked || variant.options[i] === picked))
+        .map(variant => variant.options[sizeIndex]))];
+      if (availableSizes.length === 1) slot.choices[sizeIndex] = availableSizes[0];
+      else if (!availableSizes.includes(slot.choices[sizeIndex])) slot.choices[sizeIndex] = '';
+      slot.variant = product.variants.find(variant => variant.available && product.options.every((_, i) => variant.options[i] === slot.choices[i])) || null;
       const options = this.node('div', 'osb-options');
       product.options.forEach((option, optionIndex) => {
         const label = this.node('label', '', option.name);
@@ -155,7 +161,7 @@
       const tier = this.tiers[this.active];
       this.button.disabled = this.busy || !tier.complete || !this.config.enabled;
       this.button.textContent = this.busy ? this.s.adding_text : this.s.add_text + (tier.complete ? ` · ${this.money(tier.result.total)}` : '');
-      this.status.textContent = !this.products.length ? this.s.empty_text : !this.config.enabled ? this.s.setup_text : !tier.complete ? this.s.selection_text : this.s.ready_text;
+      this.status.textContent = !tier.products.length ? this.s.empty_text : !this.config.enabled ? this.s.setup_text : !tier.complete ? this.s.selection_text : this.s.ready_text;
     }
     async add() {
       const tier = this.tiers[this.active];

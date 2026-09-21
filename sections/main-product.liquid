@@ -2014,8 +2014,8 @@
         {
           "type": "collection",
           "id": "collection",
-          "label": "Single-pair collection",
-          "info": "Up to 50 products. Each variant must represent one pair and have a Size option. Use the same collection for both parts of Shopify Buy X Get Y."
+          "label": "Default single-pair collection",
+          "info": "Used when a tier has no collection selected. Up to 50 products per collection. Duplicate collections containing the same products do not isolate Shopify discounts."
         },
         {
           "type": "checkbox",
@@ -2039,6 +2039,12 @@
         {
           "type": "header",
           "content": "Tier 1"
+        },
+        {
+          "type": "collection",
+          "id": "t1_collection",
+          "label": "Tier 1 collection",
+          "info": "Leave blank to use the default collection. Each variant must represent one pair and have a Size option."
         },
         {
           "type": "text",
@@ -2091,6 +2097,12 @@
           "content": "Tier 2"
         },
         {
+          "type": "collection",
+          "id": "t2_collection",
+          "label": "Tier 2 collection",
+          "info": "Leave blank to use the default collection. Each variant must represent one pair and have a Size option."
+        },
+        {
           "type": "text",
           "id": "t2_title",
           "label": "Tier title",
@@ -2139,6 +2151,12 @@
         {
           "type": "header",
           "content": "Tier 3"
+        },
+        {
+          "type": "collection",
+          "id": "t3_collection",
+          "label": "Tier 3 collection",
+          "info": "Leave blank to use the default collection. Each variant must represent one pair and have a Size option."
         },
         {
           "type": "text",
