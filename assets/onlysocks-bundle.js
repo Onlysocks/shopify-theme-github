@@ -119,8 +119,11 @@
       else if (!availableSizes.includes(slot.choices[sizeIndex])) slot.choices[sizeIndex] = '';
       slot.variant = product.variants.find(variant => variant.available && product.options.every((_, i) => variant.options[i] === slot.choices[i])) || null;
       const options = this.node('div', 'osb-options');
+      const sizeOnly = product.options.length === 1;
+      options.classList.toggle('osb-options--size-only', sizeOnly);
       product.options.forEach((option, optionIndex) => {
-        const label = this.node('label', '', option.name);
+        const label = this.node('label');
+        label.append(this.node('span', sizeOnly ? 'osb-visually-hidden' : '', option.name));
         const select = this.node('select');
         const placeholder = this.node('option', '', this.s.choose_option.replace('{option}', option.name));
         placeholder.value = ''; placeholder.disabled = true; select.append(placeholder);
@@ -130,6 +133,9 @@
           entry.value = value; entry.disabled = !available; select.append(entry);
         });
         select.value = slot.choices[optionIndex] || '';
+        const missingSize = optionIndex === sizeIndex && !select.value;
+        select.classList.toggle('osb-size--missing', missingSize);
+        select.setAttribute('aria-invalid', String(missingSize));
         select.addEventListener('change', () => {
           slot.choices[optionIndex] = select.value;
           slot.variant = product.variants.find(v => v.available && product.options.every((_, i) => v.options[i] === slot.choices[i])) || null;
