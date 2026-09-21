@@ -1,6 +1,7 @@
 onlysocks-bundle{display:block;color:rgb(var(--color-foreground));background:rgb(var(--color-background));font-family:var(--font-body-family);margin:2rem 0}
 onlysocks-bundle [hidden]{display:none!important}
 .osb-heading{margin:0 0 1rem;padding:1.4rem;background:var(--osb-heading-bg);color:var(--osb-heading-fg);font-family:var(--osb-font);font-size:1.6rem}
+.osb-intro{box-sizing:border-box;width:100%;padding:0 1.4rem 1rem;font-size:1.2rem;line-height:1.5;overflow-wrap:anywhere;color:inherit;background:transparent}
 .osb-tier{border:1px solid var(--osb-border);border-radius:var(--osb-radius);margin-bottom:.8rem;overflow:visible}
 .osb-tier.is-selected{border-color:var(--osb-accent);box-shadow:0 0 0 1px var(--osb-accent)}
 .osb-toggle{display:flex;align-items:center;gap:1rem;width:100%;padding:1.6rem 1.2rem;text-align:left;border:0;border-radius:inherit;color:inherit;background:transparent;cursor:pointer;font:inherit}
